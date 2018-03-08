@@ -1,0 +1,45 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<script src="node_modules/timeago.js/dist/timeago.min.js"></script>
+
+
+<dom-module id="fuzzy-date">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+        <span>[[_format(date)]]</span>
+    </template>
+
+    <script>
+        /**
+         * `fuzzy-date`
+         *
+         *
+         * @customElement
+         * @polymer
+         * @demo demo/index.html
+         */
+
+        class FuzzyDate extends Polymer.Element {
+            static get is() {
+                return 'fuzzy-date';
+            }
+
+            static get properties() {
+                return {
+                    date: {
+                        type: String
+                    }
+                };
+            }
+
+            _format(date) {
+                return timeago().format(date);
+            }
+        }
+
+        window.customElements.define(FuzzyDate.is, FuzzyDate);
+    </script>
+</dom-module>

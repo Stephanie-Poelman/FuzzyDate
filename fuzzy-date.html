@@ -31,15 +31,37 @@
                 return {
                     date: {
                         type: String
+                    },
+                    days: {
+                        type: Number,
+                        value: 6,
+                        reflectToAttribute: true
                     }
                 };
             }
 
             _format(date) {
-                return timeago().format(date);
+
+                let givenDate = new Date(date);
+
+//attribuut toevoegen waarmee je aantal dagen/maanden die worden weergegeven kan kiezen
+                let today = new Date();
+                let daysAgo = this._daysBetween(givenDate, today);
+
+                console.log(this.days);
+                if(daysAgo < this.days) {
+                    return timeago().format(date);
+                }
+                else {
+                    return givenDate.toDateString();
+                }
+            }
+
+            _daysBetween(start, end) {
+                const millisecondsPerDay = 24 * 60 * 60 * 1000;
+                return Math.floor((end - start) / millisecondsPerDay);
             }
         }
-
         window.customElements.define(FuzzyDate.is, FuzzyDate);
     </script>
 </dom-module>

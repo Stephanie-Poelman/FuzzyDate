@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
@@ -10,43 +10,79 @@
     <script src="../../web-component-tester/browser.js"></script>
 
     <link rel="import" href="../fuzzy-date.html">
-  </head>
-  <body>
+</head>
+<body>
 
-    <test-fixture id="BasicTestFixture">
-      <template>
+<test-fixture id="basic">
+    <template>
         <fuzzy-date></fuzzy-date>
-      </template>
-    </test-fixture>
+    </template>
+</test-fixture>
 
-    <test-fixture id="ChangedPropertyTestFixture">
-      <template>
-        <fuzzy-date prop1="new-prop1"></fuzzy-date>
-      </template>
-    </test-fixture>
+<test-fixture id="days_1000">
+    <template>
+        <fuzzy-date days="1000"></fuzzy-date>
+    </template>
+</test-fixture>
 
-    <script>
-      suite('fuzzy-date', () => {
+<test-fixture id="days_ago_numeric_display">
+    <template>
+        <fuzzy-date date="Mon Mar 11 2018 11:22:14 GMT+0100 (CET)" days="0"></fuzzy-date>
+    </template>
+</test-fixture>
 
-        test('instantiating the element with default properties works', () => {
-          const element = fixture('BasicTestFixture');
-          assert.equal(element.prop1, 'fuzzy-date');
-          const elementShadowRoot = element.shadowRoot;
-          const elementHeader = elementShadowRoot.querySelector('h2');
-          assert.equal(elementHeader.innerHTML, 'Hello fuzzy-date!');
+<test-fixture id="More then 6 days ago">
+    <template>
+        <fuzzy-date date="Mon Mar 1 2018 11:22:14 GMT+0100 (CET)"></fuzzy-date>
+    </template>
+</test-fixture>
+
+<script>
+    suite('fuzzy-date', () => {
+
+        test('testing one day ago', () => {
+            let date = new Date();
+            date.setDate(date.getDate() - 1);
+
+            const element = fixture('basic');
+            element.date = date.toString();
+
+            const elementShadowRoot = element.shadowRoot;
+            const elementHeader = elementShadowRoot.querySelector('span');
+            assert.equal(elementHeader.innerHTML, '1 day ago');
         });
 
-        test('setting a property on the element works', () => {
-          // Create a test fixture
-          const element = fixture('ChangedPropertyTestFixture');
-          assert.equal(element.prop1, 'new-prop1');
-          const elementShadowRoot = element.shadowRoot;
-          const elementHeader = elementShadowRoot.querySelector('h2');
-          assert.equal(elementHeader.innerHTML, 'Hello new-prop1!');
+        test('display numeric date if the given date is more then 6 days ago', () => {
+            // Create a test fixture
+            const element = fixture('More then 6 days ago');
+            assert.equal(element.date, "Mon Mar 1 2018 11:22:14 GMT+0100 (CET)");
+            const elementShadowRoot = element.shadowRoot;
+            const elementHeader = elementShadowRoot.querySelector('span');
+            assert.equal(elementHeader.innerHTML, 'Thu Mar 01 2018');
         });
 
-      });
-    </script>
+        test('display numeric date depending on the given value for daysAgo', () => {
+            // Create a test fixture
+            const element = fixture('days_ago_numeric_display');
+            assert.equal(element.date, "Mon Mar 11 2018 11:22:14 GMT+0100 (CET)");
+            const elementShadowRoot = element.shadowRoot;
+            const elementHeader = elementShadowRoot.querySelector('span');
+            assert.equal(elementHeader.innerHTML, 'Sun Mar 11 2018');
+        });
 
-  </body>
+        test('display numeric date depending on the given value for daysAgo', () => {
+            let date = new Date();
+            date.setDate(date.getDate() - 730);
+
+            const element = fixture('days_1000');
+            element.date = date.toString();
+
+            const elementShadowRoot = element.shadowRoot;
+            const elementHeader = elementShadowRoot.querySelector('span');
+            assert.equal(elementHeader.innerHTML, '2 years ago');
+        });
+    });
+
+</script>
+</body>
 </html>

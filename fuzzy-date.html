@@ -41,22 +41,36 @@
             }
 
             _format(date) {
-
                 let givenDate = new Date(date);
                 if (isNaN(givenDate.getTime())) {
                     return '';
                 }
 
-    //attribuut toevoegen waarmee je aantal dagen/maanden die worden weergegeven kan kiezen
+                //attribuut toevoegen waarmee je aantal dagen/maanden die worden weergegeven kan kiezen
                 let today = new Date();
                 let daysAgo = this._daysBetween(givenDate, today);
 
-                console.log(this.days);
-                if(daysAgo < this.days) {
+                if (daysAgo < this.days) {
                     return timeago().format(date);
                 }
                 else {
-                    return givenDate.toDateString();
+
+                    console.log(FuzzyDate._locales());
+                    const locale = navigator.language;
+                    console.log(locale);// zoek uit wat locale van browser is
+                    // haal de maanden lijst die horen bij 'locale'
+
+                    //notatie om een property uit een object te halen
+                    const locales = FuzzyDate._locales();
+                    const currentLocaleData = locales[locale];
+                    console.log('Current locale data:');
+                    console.log(currentLocaleData);
+                    const month = currentLocaleData.months[givenDate.getMonth()];
+                    const day = givenDate.getDate();
+                    const year = givenDate.getFullYear();
+                    // Month ophalen vanaf givenDate (wat een javascript Date is)
+                    // Month krijg je als een integer. maar daar moet je de month als text van maken
+                    return day + " " + month + " " + year;
                 }
             }
 
@@ -64,7 +78,23 @@
                 const millisecondsPerDay = 24 * 60 * 60 * 1000;
                 return Math.floor((end - start) / millisecondsPerDay);
             }
+
+            static _locales() {
+                return {
+                    'en-GB': {
+                        months: [
+                            'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
+                        ],
+                    },
+                    'nl': {
+                        months: [
+                            'januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober', 'november', 'december'
+                        ],
+                    },
+                }
+            };
         }
+
         window.customElements.define(FuzzyDate.is, FuzzyDate);
     </script>
 </dom-module>

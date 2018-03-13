@@ -57,7 +57,6 @@
         });
 
         test('display numeric date if the given date is more then 6 days ago', () => {
-            // Create a test fixture
             const element = fixture("more-then-6-days-ago");
             assert.equal(element.date, "Mon Mar 1 2018 11:22:14 GMT+0100 (CET)");
             const elementShadowRoot = element.shadowRoot;
@@ -66,7 +65,6 @@
         });
 
         test('display numeric date depending on the given value for daysAgo', () => {
-            // Create a test fixture
             const element = fixture('days-ago-numeric-display');
             assert.equal(element.date, "Mon Mar 11 2018 11:22:14 GMT+0100 (CET)");
             const elementShadowRoot = element.shadowRoot;

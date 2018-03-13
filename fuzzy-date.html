@@ -43,8 +43,11 @@
             _format(date) {
 
                 let givenDate = new Date(date);
+                if (isNaN(givenDate.getTime())) {
+                    return '';
+                }
 
-//attribuut toevoegen waarmee je aantal dagen/maanden die worden weergegeven kan kiezen
+    //attribuut toevoegen waarmee je aantal dagen/maanden die worden weergegeven kan kiezen
                 let today = new Date();
                 let daysAgo = this._daysBetween(givenDate, today);
 

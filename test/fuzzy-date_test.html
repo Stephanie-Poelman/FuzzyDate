@@ -19,19 +19,25 @@
     </template>
 </test-fixture>
 
-<test-fixture id="days_1000">
+<test-fixture id="1000-days">
     <template>
         <fuzzy-date days="1000"></fuzzy-date>
     </template>
 </test-fixture>
 
-<test-fixture id="days_ago_numeric_display">
+<test-fixture id="days-ago-numeric-display">
     <template>
         <fuzzy-date date="Mon Mar 11 2018 11:22:14 GMT+0100 (CET)" days="0"></fuzzy-date>
     </template>
 </test-fixture>
 
-<test-fixture id="More then 6 days ago">
+<test-fixture id="more-then-6-days-ago">
+    <template>
+        <fuzzy-date date="Mon Mar 1 2018 11:22:14 GMT+0100 (CET)"></fuzzy-date>
+    </template>
+</test-fixture>
+
+<test-fixture id="invalid-date">
     <template>
         <fuzzy-date date="Mon Mar 1 2018 11:22:14 GMT+0100 (CET)"></fuzzy-date>
     </template>
@@ -43,10 +49,8 @@
         test('testing one day ago', () => {
             let date = new Date();
             date.setDate(date.getDate() - 1);
-
-            const element = fixture('basic');
+            const element = fixture("basic");
             element.date = date.toString();
-
             const elementShadowRoot = element.shadowRoot;
             const elementHeader = elementShadowRoot.querySelector('span');
             assert.equal(elementHeader.innerHTML, '1 day ago');
@@ -54,7 +58,7 @@
 
         test('display numeric date if the given date is more then 6 days ago', () => {
             // Create a test fixture
-            const element = fixture('More then 6 days ago');
+            const element = fixture("more-then-6-days-ago");
             assert.equal(element.date, "Mon Mar 1 2018 11:22:14 GMT+0100 (CET)");
             const elementShadowRoot = element.shadowRoot;
             const elementHeader = elementShadowRoot.querySelector('span');
@@ -63,26 +67,33 @@
 
         test('display numeric date depending on the given value for daysAgo', () => {
             // Create a test fixture
-            const element = fixture('days_ago_numeric_display');
+            const element = fixture('days-ago-numeric-display');
             assert.equal(element.date, "Mon Mar 11 2018 11:22:14 GMT+0100 (CET)");
             const elementShadowRoot = element.shadowRoot;
             const elementHeader = elementShadowRoot.querySelector('span');
             assert.equal(elementHeader.innerHTML, 'Sun Mar 11 2018');
         });
 
-        test('display numeric date depending on the given value for daysAgo', () => {
+        test('when the time that has passed is shorter then the default value of property date, use timeago() format to display the date and', () => {
             let date = new Date();
             date.setDate(date.getDate() - 730);
-
-            const element = fixture('days_1000');
+            const element = fixture('1000-days');
             element.date = date.toString();
-
             const elementShadowRoot = element.shadowRoot;
             const elementHeader = elementShadowRoot.querySelector('span');
             assert.equal(elementHeader.innerHTML, '2 years ago');
         });
-    });
 
+        test('display an empty String when date input is invalid', () => {
+            let date = new Date('Text');
+            date.setDate(date.getDate());
+            const element = fixture('invalid-date');
+            element.date = date.toString();
+            const elementShadowRoot = element.shadowRoot;
+            const elementHeader = elementShadowRoot.querySelector('span');
+            assert.equal(elementHeader.innerHTML, '');
+        });
+    });
 </script>
 </body>
 </html>

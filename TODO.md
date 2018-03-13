@@ -6,4 +6,6 @@
 
 - zorgen dat locale(talen) werkt. 
 
+- checken of Date een echt een datum is (is NAN)
+
 
